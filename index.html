@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cerca Norme Taxi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+    h1 {
+      color: #1a5276;
+      text-align: center;
+    }
+    input, button {
+      padding: 12px;
+      margin: 10px 0;
+      width: 100%;
+      font-size: 16px;
+    }
+    .risultato {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .fonte {
+      font-weight: bold;
+      color: #1a5276;
+    }
+    .nessun-risultato {
+      color: #777;
+      text-align: center;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Cerca nelle Norme del Taxi</h1>
+  <p>Inserisci una parola chiave, es: <strong>territorialità</strong>, <strong>noleggio</strong>, <strong>disabile</strong></p>
+
+  <input type="text" id="cercaInput" placeholder="Cerca una norma..." />
+  <button onclick="cerca()">Cerca</button>
+
+  <div id="risultati"></div>
+
+  <script>
+    // 🔗 URL del tuo db.json su GitHub Pages (modifica TUO_USERNAME)
+    const URL = "https://TUO_USERNAME.github.io/nome-repo/db.json";
+
+    async function cerca() {
+      const query = document.getElementById("cercaInput").value.trim().toLowerCase();
+      if (!query) {
+        alert("Per favore, inserisci una parola da cercare.");
+        return;
+      }
+
+      const div = document.getElementById("risultati");
+      div.innerHTML = "🔍 Ricerca in corso...";
+
+      try {
+        const response = await fetch(URL);
+        
+        // 🔴 Aggiungi: controllo se la risposta è OK
+        if (!response.ok) {
+          throw new Error(`Errore HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // 🔍 Cerca nei titoli e contenuti
+        const risultati = data.norme.filter(norma => 
+          norma.titolo.toLowerCase().includes(query) ||
+          norma.contenuto.toLowerCase().includes(query)
+        );
+
+        // 🖨️ Mostra i risultati
+        if (risultati.length === 0) {
+          div.innerHTML = "<p class='nessun-risultato'>Nessuna norma trovata.</p>";
+        } else {
+          div.innerHTML = risultati.map(n => `
+            <div class="risultato">
+              <div class="fonte">${n.tipo.toUpperCase()} - ${n.titolo}</div>
+              <div><strong>Fonte:</strong> ${n.fonte}</div>
+              <p><strong>Estratto:</strong> ${evidenzia(n.contenuto, query)}</p>
+            </div>
+          `).join('');
+        }
+
+      } catch (error) {
+        console.error("ERRORE:", error);
+        div.innerHTML = `
+          <p style="color:red;">
+            <strong>Errore:</strong> ${error.message}
+          </p>
+          <p>Verifica che:
+            <ul>
+              <li>Il file <code>db.json</code> esiste all'URL indicato</li>
+              <li>L'URL è corretto</li>
+              <li>Il file è in formato JSON valido</li>
+            </ul>
+          </p>`;
+      }
+    }
+
+    // Funzione per evidenziare la parola cercata
+    function evidenzia(testo, parola) {
+      const regex = new RegExp(`(${parola})`, 'gi');
+      return testo.replace(regex, '<mark style="background: yellow;">$1</mark>');
+    }
+  </script>
+</body>
+</html>
