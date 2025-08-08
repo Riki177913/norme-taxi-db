@@ -1,0 +1,27 @@
+{
+  "norme": [
+    {
+      "id": 1,
+      "titolo": "Codice della Strada",
+      "tipo": "nazionale",
+      "fonte": "Decreto Legislativo 30 aprile 1992, n. 285",
+      "contenuto": "Articolo 157: I servizi di noleggio con conducente sono disciplinati dalle norme seguenti. L'esercizio del servizio deve avvenire nel rispetto delle disposizioni vigenti in materia di circolazione stradale."
+    },
+    {
+      "id": 2,
+      "titolo": "Legge Regionale Lombardia",
+      "tipo": "regionale",
+      "regione": "Lombardia",
+      "fonte": "LR 12/2020",
+      "contenuto": "Articolo 8: I veicoli NCC possono operare su tutto il territorio regionale, ma non possono effettuare prelievi fuori dai comuni autorizzati."
+    },
+    {
+      "id": 3,
+      "titolo": "Regolamento Comunale Milano",
+      "tipo": "comunale",
+      "comune": "Milano",
+      "fonte": "Regolamento Comunale n. 7/2019",
+      "contenuto": "Articolo 5: I servizi NCC devono iniziare e terminare entro il territorio del comune di Milano."
+    }
+  ]
+}
